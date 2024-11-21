@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden; 
+            position: relative; 
+            height: 100vh; 
+            background-color: #f4f4f9; 
+        }
+
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; 
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            padding: 50px 20px;
+            text-align: center;
+            z-index: 1;
+            color: #fff;
+            cursor: move; 
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.7); 
+            width: 600px; 
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #f6f9fb; 
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #f6f9fb; 
+            margin-bottom: 30px;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .index-links a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            margin: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .index-links a:hover {
+            background-color: #f2f6f2;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05); 
+        }
+
+        audio {
+            display: none;
+        }
+
+        .index-links {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <video class="background-video" autoplay muted loop>
+        <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="container" id="draggable-box">
+        <h2>Welcome Welcome</h2>
+        <h2>Samiullah Soba's 🤣🤣 🤣🤣</h2>
+
+        <audio id="welcomeAudio" preload="auto">
+            <source src="{{ url_for('static', filename='welcome.mp3') }}" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+
+        <div class="index-links">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
+    </div>
+
+    <script>
+        var dragBox = document.getElementById('draggable-box');
+        var isDragging = false;
+        var offsetX, offsetY;
+
+        dragBox.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            offsetX = e.clientX - dragBox.getBoundingClientRect().left;
+            offsetY = e.clientY - dragBox.getBoundingClientRect().top;
+            dragBox.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                dragBox.style.left = (e.clientX - offsetX) + 'px';
+                dragBox.style.top = (e.clientY - offsetY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            dragBox.style.cursor = 'move'; 
+        });
+
+        window.onload = function() {
+            var audio = document.getElementById('welcomeAudio');
+
+            audio.currentTime = 0;
+
+            function playAudio() {
+                var playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(function() {
+                        console.log("Audio is playing.");
+                    }).catch(function(error) {
+                        console.log("Autoplay failed. Error: ", error);
+                        window.addEventListener('click', function() {
+                            var playAfterClick = audio.play();
+                            playAfterClick.then(function() {
+                                console.log("Audio played after user click.");
+                            }).catch(function(error) {
+                                console.log("Error after click: ", error);
+                            });
+                        });
+                    });
+                }
+            }
+
+            playAudio();
+
+            audio.addEventListener('play', function() {
+                console.log("Audio started playing automatically.");
+            });
+        };
+    </script>
+</body>
+</html>
