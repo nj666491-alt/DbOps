@@ -34,7 +34,8 @@
             font-size: 1rem;
         }
 
-        input[type="text"], input[type="password"] {
+        input[type="text"], 
+        input[type="password"] {
             width: 100%;
             padding: 12px;
             margin: 10px 0 20px;
@@ -53,7 +54,6 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
         button:hover {
@@ -61,55 +61,42 @@
         }
 
         .flash-messages {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f8d7da;
-            color: #721c24;
-            border-radius: 4px;
+            margin-top: 15px;
             text-align: center;
         }
 
-        .flash-messages.success {
+        .flash-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .success {
             background-color: #d4edda;
             color: #155724;
         }
 
-        .flash-messages.error {
+        .danger {
             background-color: #f8d7da;
             color: #721c24;
         }
 
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 0.9rem;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-
-        footer a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <h2>Admin Login</h2>
-        
-        <form method="POST" action="{{ url_for('admin_login') }}">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+        <form method="POST" action="{{ url_for('admin') }}">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
 
             <button type="submit">Login</button>
         </form>
@@ -117,18 +104,14 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
-                    <ul>
-                        {% for category, message in messages %}
-                            <li class="{{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 </div>
             {% endif %}
         {% endwith %}
     </div>
-
-    <footer>
-        <p>Dev. By <a href="https://syedrizwan.tech/" target="_blank">Syed Rizwan</a> - Mini-project to demonstrate the concept of DB operations using Flask and MySQL.</p>
-    </footer>
 </body>
 </html>
